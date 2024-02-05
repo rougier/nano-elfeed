@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xl="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" version="1.1" viewBox="464 368 64 64" width="64" height="64">
+  <defs/>
+  <g id="Canvas_1" stroke-dasharray="none" fill-opacity="1" stroke-opacity="1" stroke="none" fill="none">
+    <title>Canvas 1</title>
+    <g id="Canvas_1_Layer_1">
+      <title>Layer 1</title>
+      <g id="Group_320">
+        <g id="Graphic_265">
+          <path d="M 472 368 L 520 368 C 524.4183 368 528 371.5817 528 376 L 528 424 C 528 428.4183 524.4183 432 520 432 L 472 432 C 467.5817 432 464 428.4183 464 424 L 464 376 C 464 371.5817 467.5817 368 472 368 Z" fill="white"/>
+        </g>
+        <g id="Graphic_40">
+          <title>slashdot-read</title>
+          <path d="M 472 368 L 472 368 C 467.5817 368 464 371.5817 464 376 L 464 424 C 464 428.4183 467.5817 432 472 432 L 520 432 C 524.4183 432 528 428.4183 528 424 L 528 376 C 528 371.5817 524.4183 368 520 368 Z M 475.72225 424.6016 L 497.8066 375 L 507.3671 375 L 485.2895 424.6016 Z M 516.27775 417.09938 L 516.27775 417.09938 C 516.27775 421.4649 512.7255 424.9999 508.34775 424.9999 C 503.9661 424.9999 500.41775 421.4649 500.41775 417.09938 C 500.41775 412.73888 503.9661 409.19888 508.34775 409.19888 C 512.7255 409.19888 516.27775 412.73888 516.27775 417.09938 Z" fill="#8ba5af"/>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xl="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:dc="http://purl.org/dc/elements/1.1/" viewBox="224 288 64 64" width="64" height="64">
+  <defs/>
+  <g id="Canvas_1" stroke-dasharray="none" stroke="none" stroke-opacity="1" fill-opacity="1" fill="none">
+    <title>Canvas 1</title>
+    <g id="Canvas_1_Layer_1">
+      <title>Layer 1</title>
+      <g id="Group_276">
+        <g id="Graphic_262">
+          <path d="M 232 288 L 280 288 C 284.41828 288 288 291.58172 288 296 L 288 344 C 288 348.41828 284.41828 352 280 352 L 232 352 C 227.58172 352 224 348.41828 224 344 L 224 296 C 224 291.58172 227.58172 288 232 288 Z" fill="white"/>
+        </g>
+        <g id="Graphic_17">
+          <title>RSS-unread</title>
+          <path d="M 232 288 L 232 288 C 227.58172 288 224 291.58172 224 296 L 224 344 C 224 348.41828 227.58172 352 232 352 L 280 352 C 284.41828 352 288 348.41828 288 344 L 288 296 C 288 291.58172 284.41828 288 280 288 Z M 232 304 L 232 296 C 258.50967 296 280 317.49033 280 344 L 272 344 C 272 321.9086 254.0914 304 232 304 Z M 245.65685 330.34315 C 248.78106 333.46734 248.78106 338.53266 245.65685 341.65685 C 242.53266 344.78106 237.46734 344.78106 234.34315 341.65685 C 231.21894 338.53266 231.21894 333.46734 234.34315 330.34315 C 237.46734 327.21894 242.53266 327.21894 245.65685 330.34315 M 232 320 L 232 312 C 249.6731 312 264 326.3269 264 344 L 256 344 C 256 330.74517 245.25483 320 232 320 Z" fill="#ffa500"/>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

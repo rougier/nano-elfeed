@@ -81,22 +81,31 @@
     (cons image-unread image-read)))
 
 (defvar nano-elfeed-icons
-  `(("RSS"             . ,(nano-elfeed-make-icon "rss"))
+  `( ;; ("RSS"             . ,(nano-elfeed-make-icon "rss"))
     ("Aeon"            . ,(nano-elfeed-make-icon "aeon"))
     ("Emacs"           . ,(nano-elfeed-make-icon "reddit"))
+    ("Emacs Life"      . ,(nano-elfeed-make-icon "emacs"))
+    ("Apple ]["        . ,(nano-elfeed-make-icon "apple-iie"))
+    ("Korben"          . ,(nano-elfeed-make-icon "korben"))
+    ("Journal of Neuroscience" . ,(nano-elfeed-make-icon "jneuro"))
     ("Emacs org-mode"  . ,(nano-elfeed-make-icon "reddit"))
+    ("Frontiers in Neurobotics"  . ,(nano-elfeed-make-icon "frontiers"))
+    ("Frontiers in Decision"  . ,(nano-elfeed-make-icon "frontiers"))
+    ("Frontiers in Computational"  . ,(nano-elfeed-make-icon "frontiers"))
+    ("Pixels"          . ,(nano-elfeed-make-icon "lemonde"))
     ("Slashdot"        . ,(nano-elfeed-make-icon "slashdot"))
     ("Ars Technica"    . ,(nano-elfeed-make-icon "ars-technica"))
     ("Boing Boing"     . ,(nano-elfeed-make-icon "boing-boing"))
     ("eLife"           . ,(nano-elfeed-make-icon "elife"))
     ("Plos Comp.Bio"   . ,(nano-elfeed-make-icon "plos"))
     ("Quanta"          . ,(nano-elfeed-make-icon "quanta"))
-    ("BioRxiv Neuro"   . ,(nano-elfeed-make-icon "biorxiv"))))
+    ("BioRxiv Neuro"   . ,(nano-elfeed-make-icon "biorxiv"))
+    ("BioRxiv Cog"     . ,(nano-elfeed-make-icon "biorxiv"))))
 
 (defun nano-elfeed-get-icon (name unread)
   (let ((icon (alist-get (s-trim name) nano-elfeed-icons nil nil #'equal)))
     (when icon (if unread (car icon) (cdr icon)))))
-  
+
 (defvar nano-elfeed-rss-icon-active
       (nano-elfeed--make-icon
        (create-image (format nano-elfeed--rss-icon-data "orange") 'svg t)))
@@ -105,17 +114,40 @@
       (nano-elfeed--make-icon
        (create-image (format nano-elfeed--rss-icon-data "#90A4AE") 'svg t)))
 
-(defun nano-elfeed-entry (title subtitle date unread &optional no-newline)
+
+(defun nano-elfeed-count-unread ()
+  "Count the number of entries and feeds being currently displayed."
+  (if (and elfeed-search-filter-active elfeed-search-filter-overflowing)
+      "?/?"
+    (cl-loop with feeds = (make-hash-table :test 'equal)
+             for entry in elfeed-search-entries
+             for feed = (elfeed-entry-feed entry)
+             for url = (elfeed-feed-url feed)
+             count entry into entry-count
+             count (elfeed-tagged-p 'unread entry) into unread-count
+             do (puthash url t feeds)
+             finally
+             (cl-return
+              (format "%s/%s" (+ 1 unread-count) entry-count)))))
+
+
+(defun nano-elfeed-entry (title subtitle date unread &optional no-newline background)
   (let* ((icon (or (nano-elfeed-get-icon title unread)
                    (if unread
                        nano-elfeed-rss-icon-active
                      nano-elfeed-rss-icon-inactive)))
          (date (relative-date date))
-         (subtitle (s-truncate (truncate (* 1 (window-width))) subtitle "…"))
+         (count (concat
+                 (with-current-buffer "*elfeed-search*"
+                   (cond ((zerop (elfeed-db-last-update)) "")
+                         ((> (elfeed-queue-count-total) 0) "")
+                         (t (concat (nano-elfeed-count-unread) " "))))
+                 " "))
+         (subtitle (s-truncate (truncate (* .9 (window-width))) subtitle "…"))
          (foreground-color (if unread
                                (face-foreground 'default)
                              (face-foreground 'font-lock-comment-face nil t)))
-         (background-color (face-background 'highlight))
+         (background-color (or background (face-background 'highlight)))
          (border-color     (face-background 'default))
          (face-upper    `(:foreground ,foreground-color
                           :background ,background-color
@@ -139,8 +171,8 @@
 ;;                                     (:color ,border-color
 ;;                                      :style line
 ;;                                      :position t)
-                          )))
-    (insert (concat
+                          ))
+    (top (concat
      ;; Upper part
 ;;     (propertize " " 'face `(:background ,border-color)
 ;;                     'display '((raise 0.5) (space :width (1))))
@@ -155,8 +187,9 @@
                      'display '(space :align-to (- right (0))))
 ;;     (propertize " " 'face `(:background ,border-color)
 ;;                     'display '(space :width (1)))
-     (propertize " " 'display "\n")
+     (propertize " " 'display "\n")))
 
+    (bottom (concat
      ;; Lower part
 ;;     (propertize " " 'face `(:background ,border-color)
 ;;                     'display '((raise -0.5) (space :width (1))))
@@ -165,16 +198,18 @@
      (propertize " " 'face face-lower)
      (propertize subtitle 'face face-subtitle)
      (propertize " " 'face face-lower
-                     'display '(space :align-to (- right (0))))
+                     'display `(space :align-to (- right (0) ,(length count))))
+     (propertize count 'face face-lower)
 ;;     (propertize " " 'face `(:background ,border-color)
 ;;                 'display '(space :width (1)))
      (unless no-newline
-       (propertize "\n"))))))
+       (propertize "\n")))))
+    (cons top bottom)))
 
 
 (defun nano-elfeed-search-print-entry (entry)
   "Alternative printing of elfeed entries using SVG tags."
-  
+
   (let* ((date (elfeed-entry-date entry))
          (title (or (elfeed-meta entry :title)
                     (elfeed-entry-title entry) ""))
@@ -182,9 +217,10 @@
          (feed (elfeed-entry-feed entry))
          (feed-title (when feed
                        (or (elfeed-meta feed :title)
-                           (elfeed-feed-title feed)))))
-
-    (nano-elfeed-entry feed-title title date unread t)))
+                           (elfeed-feed-title feed))))
+         (entry (nano-elfeed-entry feed-title title date unread t)))
+    (insert (car entry))
+    (insert (cdr entry))))
 
 (defun nano-elfeed-search-mode ()
   (setq left-fringe-width 1
@@ -205,6 +241,15 @@
 
 (defun nano-elfeed-show-mode ()
   (visual-line-mode)
+
+  ;; (setq left-fringe-width 1
+  ;;       right-fringe-width 1
+  ;;       left-margin-width 1
+  ;;       right-margin-width 0
+  ;;       stripes-unit 1)
+  ;; (set-window-buffer nil (current-buffer))
+
+
 ;;  (setq truncate-lines t)
   (let ((inhibit-read-only t)
         (inhibit-modification-hooks t))
@@ -238,19 +283,115 @@
   (with-current-buffer (elfeed-search-buffer)
     (when elfeed-search-remain-on-entry (forward-line 1))
     (nano-elfeed-prev-entry)
+    (nano-elfeed-prev-entry)
     (call-interactively #'elfeed-search-show-entry)))
 
-(setq elfeed-search-filter "@1-weeks-ago +unread"          
-      elfeed-search-print-entry-function
-           #'nano-elfeed-search-print-entry)
+
+(defun nano-elfeed-show-refresh--nano-style ()
+  "Update the buffer to match the selected entry, using a mail-style."
+  (interactive)
+  (let* ((inhibit-read-only t)
+
+         (entry elfeed-show-entry)
+         (date (elfeed-entry-date entry))
+         (title (or (elfeed-meta entry :title)
+                    (elfeed-entry-title entry) ""))
+         ;;(unread (member 'unread (elfeed-entry-tags entry)))
+         (feed (elfeed-entry-feed entry))
+         (feed-title (when feed
+                       (or (elfeed-meta feed :title)
+                           (elfeed-feed-title feed))))
+
+         (icon (or (nano-elfeed-get-icon feed-title t)
+                   nano-elfeed-rss-icon-active))
+
+         (entry (nano-elfeed-entry feed-title title date t t
+                                   (face-background 'nano-subtle)))
+
+         ;; (title (elfeed-entry-title elfeed-show-entry))
+         ;; (date (seconds-to-time (elfeed-entry-date elfeed-show-entry)))
+         (authors (elfeed-meta elfeed-show-entry :authors))
+         (link (elfeed-entry-link elfeed-show-entry))
+         (tags (elfeed-entry-tags elfeed-show-entry))
+         (tagsstr (mapconcat #'symbol-name tags ", "))
+         (nicedate (format-time-string "%a, %e %b %Y %T %Z" date))
+         (content (elfeed-deref (elfeed-entry-content elfeed-show-entry)))
+         (type (elfeed-entry-content-type elfeed-show-entry))
+         ;; (feed (elfeed-entry-feed elfeed-show-entry))
+         ;; (feed-title (elfeed-feed-title feed))
+         (base (and feed (elfeed-compute-base (elfeed-feed-url feed)))))
+    (erase-buffer)
+
+    (setq tab-line-format (car entry))
+    (setq header-line-format (cdr entry))
+    ;; (setq header-line-format nil)
+
+    ;; (insert "\n")
+    ;; (insert (propertize title'face 'nano-strong))
+    ;; (insert "\n")
+    ;; (let ((fill-column (- (window-width) 12)))
+    ;;   (fill-region (point-min) (point-max)))
+    ;; (goto-char (point-min))
+    ;; (forward-line 1)
+    ;; (insert (concat (car icon) " "))
+    ;; (forward-line 1)
+    ;; (beginning-of-line)
+    ;; (insert (concat (cdr icon) " "))
+    ;; (forward-line 1)
+    ;; (insert "\n")
+
+
+;;    (insert (format (propertize "Title: %s\n" 'face 'message-header-name)
+;;                    (propertize title 'face 'message-header-subject)))
+
+    (when elfeed-show-entry-author
+      (dolist (author authors)
+        (let ((formatted (elfeed--show-format-author author)))
+          (insert
+           (format (propertize "Author: %s\n" 'face 'message-header-name)
+                   (propertize formatted 'face 'message-header-to))))))
+    (insert (format (propertize "Date: %s\n" 'face 'message-header-name)
+                    (propertize nicedate 'face 'message-header-other)))
+    (insert (format (propertize "Feed: %s\n" 'face 'message-header-name)
+                    (propertize feed-title 'face 'message-header-other)))
+    (when tags
+      (insert (format (propertize "Tags: %s\n" 'face 'message-header-name)
+                      (propertize tagsstr 'face 'message-header-other))))
+    (insert (propertize "Link: " 'face 'message-header-name))
+    (elfeed-insert-link link link)
+    (insert "\n")
+    (cl-loop for enclosure in (elfeed-entry-enclosures elfeed-show-entry)
+             do (insert (propertize "Enclosure: " 'face 'message-header-name))
+             do (elfeed-insert-link (car enclosure))
+             do (insert "\n"))
+
+    (insert "\n")
+    (insert (propertize title'face 'nano-strong))
+    (insert "\n")
+    (if content
+        (if (eq type 'html)
+            (elfeed-insert-html content base)
+          (insert content))
+      (insert (propertize "(empty)\n" 'face 'italic)))
+    (goto-char (point-min))))
+
+
+
+
+(setq elfeed-show-refresh-function
+     #'nano-elfeed-show-refresh--nano-style)
+
+(setq elfeed-search-filter "@1-weeks-ago +unread"
+     elfeed-search-print-entry-function
+          #'nano-elfeed-search-print-entry)
 
 (bind-key "<down>" #'nano-elfeed-next-entry 'elfeed-search-mode-map)
-(bind-key "n" #'nano-elfeed-next-entry 'elfeed-search-mode-map)
+(bind-key "n"      #'nano-elfeed-next-entry 'elfeed-search-mode-map)
 
 (bind-key "<up>" #'nano-elfeed-prev-entry 'elfeed-search-mode-map)
-(bind-key "p" #'nano-elfeed-prev-entry 'elfeed-search-mode-map)
+(bind-key "p"    #'nano-elfeed-prev-entry 'elfeed-search-mode-map)
 
-(bind-key "p" #'nano-elfeed-prev-next 'elfeed-show-mode-map)
+(bind-key "p" #'nano-elfeed-show-prev 'elfeed-show-mode-map)
 (bind-key "n" #'nano-elfeed-show-next 'elfeed-show-mode-map)
 
 (add-hook 'elfeed-search-mode-hook #'nano-elfeed-search-mode)

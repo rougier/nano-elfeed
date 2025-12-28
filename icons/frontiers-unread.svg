@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xl="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" version="1.1" viewBox="704 448 64 64" width="64" height="64">
+  <defs/>
+  <g id="Canvas_1" stroke-dasharray="none" fill-opacity="1" stroke-opacity="1" stroke="none" fill="none">
+    <title>Canvas 1</title>
+    <g id="Canvas_1_Layer_1">
+      <title>Layer 1</title>
+      <g id="Group_398">
+        <g id="Graphic_383">
+          <path d="M 712 448 L 760 448 C 764.4183 448 768 451.5817 768 456 L 768 504 C 768 508.4183 764.4183 512 760 512 L 712 512 C 707.5817 512 704 508.4183 704 504 L 704 456 C 704 451.5817 707.5817 448 712 448 Z" fill="#c0c0ff"/>
+        </g>
+        <g id="Group_380">
+          <g id="Graphic_371">
+            <title>svg_3</title>
+            <path d="M 731.9555 474.7458 L 721.18 472.65306 L 719.84416 461.9666 L 730.7087 464.01484 Z" fill="#d4181a"/>
+          </g>
+          <g id="Graphic_372">
+            <title>svg_4</title>
+            <path d="M 730.7087 464.01484 L 719.84416 461.9666 L 725.8553 456 L 736.71985 458.04824 Z" fill="#30b6bb"/>
+          </g>
+          <g id="Graphic_373">
+            <title>svg_5</title>
+            <path d="M 737.9221 468.7792 L 731.9555 474.7458 L 730.7087 464.01484 L 736.71985 458.04824 Z" fill="#007c3d"/>
+          </g>
+          <g id="Graphic_374">
+            <title>svg_7</title>
+            <path d="M 716.0594 496.65306 L 716.1039 479.6438 L 731.9555 474.7458 L 731.91095 491.66605 Z" fill="#95c01f"/>
+          </g>
+          <g id="Graphic_375">
+            <title>svg_8</title>
+            <path d="M 731.91095 491.66605 L 731.9555 474.7458 L 742.6865 482.09276 L 742.6419 499.013 Z" fill="#f0d500"/>
+          </g>
+          <g id="Graphic_376">
+            <title>svg_9</title>
+            <path d="M 726.79035 504 L 716.0594 496.65306 L 731.91095 491.66605 L 742.6419 499.013 Z" fill="#124391"/>
+          </g>
+          <g id="Graphic_377">
+            <title>svg_11</title>
+            <path d="M 731.5993 473.8998 L 735.8738 463.9703 L 741.4397 477.0612 L 737.1651 486.9462 Z" fill="#70296b"/>
+          </g>
+          <g id="Graphic_378">
+            <title>svg_12</title>
+            <path d="M 737.1651 486.9462 L 741.4397 477.0612 L 756 474.7013 L 751.6809 484.4527 Z" fill="#0094cd"/>
+          </g>
+          <g id="Graphic_379">
+            <title>svg_13</title>
+            <path d="M 741.4397 477.0612 L 735.8738 463.9703 L 750.4341 461.6549 L 756 474.7013 Z" fill="#f39103"/>
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>
